@@ -1,9 +1,6 @@
 {
-  "printWidth": 80,
+  "printWidth": 100,
   "singleQuote": true,
   "trailingComma": "all",
-  "semi": true,
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  "semi": true
 }
