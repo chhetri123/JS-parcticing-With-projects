@@ -191,6 +191,43 @@
 // const dogsCopy = dogs.slice().sort((a, b) => a.recFood - b.recFood);
 // console.log(dogsCopy);
 /////////////////////////////////////////////////
+
+// const account1 = {
+//   owner: 'Jonas Schmedtmann',
+//   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+//   interestRate: 1.2, // %
+//   pin: 1111,
+// };
+
+// const account2 = {
+//   owner: 'Jessica Davis',
+//   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
+//   interestRate: 1.5,
+//   pin: 2222,
+// };
+
+// const account3 = {
+//   owner: 'Steven Thomas Williams',
+//   movements: [200, -200, 340, -300, -20, 50, 400, -460],
+//   interestRate: 0.7,
+//   pin: 3333,
+// };
+
+// const account4 = {
+//   owner: 'Sarah Smith',
+//   movements: [430, 1000, 700, 50, 90],
+//   interestRate: 1,
+//   pin: 4444,
+// };
+
+// const account5 = {
+//   owner: 'Manish Chhetri',
+//   movements: [10000, -200, 340, -300, -20, 50, 400, -460],
+//   interestRate: 0.7,
+//   pin: 5555,
+// };
+// const accounts = [account1, account2, account3, account4, account5];
+
 // BANKIST APP
 
 // Data
@@ -235,41 +272,7 @@ const account2 = {
 };
 const accounts = [account1, account2];
 
-// const account1 = {
-//   owner: 'Jonas Schmedtmann',
-//   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
-//   interestRate: 1.2, // %
-//   pin: 1111,
-// };
-
-// const account2 = {
-//   owner: 'Jessica Davis',
-//   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
-//   interestRate: 1.5,
-//   pin: 2222,
-// };
-
-// const account3 = {
-//   owner: 'Steven Thomas Williams',
-//   movements: [200, -200, 340, -300, -20, 50, 400, -460],
-//   interestRate: 0.7,
-//   pin: 3333,
-// };
-
-// const account4 = {
-//   owner: 'Sarah Smith',
-//   movements: [430, 1000, 700, 50, 90],
-//   interestRate: 1,
-//   pin: 4444,
-// };
-
-// const account5 = {
-//   owner: 'Manish Chhetri',
-//   movements: [10000, -200, 340, -300, -20, 50, 400, -460],
-//   interestRate: 0.7,
-//   pin: 5555,
-// };
-// const accounts = [account1, account2, account3, account4, account5];
+//
 
 // Elements
 const labelWelcome = document.querySelector('.welcome');
@@ -300,11 +303,13 @@ const inputClosePin = document.querySelector('.form__input--pin');
 const eurToUsd = 1.1;
 const formatDate = (movementsDates, locale) => {
   const date = new Date(movementsDates);
+  console.log(date);
 
   const calDaysPassed = (date1, date2) =>
     Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
 
   const dayPassed = calDaysPassed(new Date(), date);
+  console.log(dayPassed);
 
   if (dayPassed === 0) return 'Today';
   if (dayPassed === 1) return 'Yesterday';
@@ -335,7 +340,7 @@ const displayMovements = function (
         return a - b;
       })
     : movements;
-
+  console.log(movs);
   movs.forEach((mov, i) => {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
@@ -407,6 +412,7 @@ const updateUi = (Account) => {
 };
 // Event handlers
 let currentAccount, timer;
+console.log(accounts);
 // fake login in
 // currentAccount = account1;
 // updateUi(currentAccount);
@@ -422,7 +428,7 @@ const startLogOut = function () {
 
     if (time === 0) {
       clearInterval(timer);
-      containerApp.style.opacity = 0;
+      containerApp.style.display = 'none';
       labelWelcome.textContent = 'Log in to get started';
     }
     time--;
@@ -474,7 +480,7 @@ btnLogin.addEventListener('click', function (e) {
     labelWelcome.textContent = `Welcome back,${
       currentAccount.owner.split(' ')[0]
     }`;
-    containerApp.style.opacity = 1;
+    containerApp.style.display = 'grid';
     // Inialize date
     // labelDate.textContent = date();
     // clear the input fields
@@ -535,6 +541,7 @@ btnLoan.addEventListener('click', function (e) {
     setTimeout(() => {
       currentAccount.movements.push(amount);
       currentAccount.movementsDates.push(new Date().toISOString());
+      console.log(new Date().toISOString());
 
       updateUi(currentAccount);
       // Reset timer
@@ -564,11 +571,53 @@ btnClose.addEventListener('click', function (e) {
     });
 
     accounts.splice(index, 1);
-    containerApp.style.opacity = 0;
+    containerApp.style.display = 'none';
     inputCloseUsername.value = inputClosePin.value = '';
     inputClosePin.blur();
   }
 });
+
+const signUpName = 'Manish Chhetri';
+const intrest = 1.5;
+const pin = 5555;
+const curr = 'INR';
+const Local = 'en-US';
+let newAccount;
+
+// Create NEw Account
+// console.log(currentAccount);
+
+const createAccount = () => {
+  const BankName = signUpName
+    .toLowerCase()
+    .split(' ')
+    .map((n) => n[0])
+    .join('');
+  const Username = accounts
+    .map((account) => account)
+    .find((account) => {
+      return account.username === BankName;
+    });
+  if (Username === undefined) {
+    // Create New Object
+    newAccount = {
+      username: BankName,
+      owner: signUpName,
+      movementsDates: [new Date().toISOString()],
+      interestRate: intrest,
+      pin: pin,
+      currency: curr,
+      locale: Local,
+      movements: [1000],
+    };
+
+    // Add aboject to the array
+    accounts.push(newAccount);
+
+    // update UI
+    // updateUi(accounts);
+  }
+};
 
 //
 // Setting date and Time
