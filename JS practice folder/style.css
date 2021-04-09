@@ -177,13 +177,12 @@ nav {
   transition: all 0.3s;
 }
 
-.login__input:focus,
-.signup__input:focus,
-select:focus {
-  outline: none;
+.login__input:focus select:focus {
   border: 1px solid #ccc;
 }
-
+.signup__input:focus {
+  outline: none;
+}
 .login__input::placeholder {
   color: #bbb;
 }
@@ -200,8 +199,7 @@ select:focus {
 .login__btn:hover,
 .login__btn:focus,
 .btn--sort:hover,
-.btn--sort:focus,
-.signup__btn :focus {
+.btn--sort:focus {
   outline: none;
   color: #777;
 }
@@ -210,9 +208,9 @@ select:focus {
 /*  */
 .app {
   position: relative;
+  transform: translateY(-2.5rem);
   max-width: 100rem;
   margin: 4rem auto;
-
   grid-template-columns: 4fr 3fr;
   grid-template-rows: auto repeat(3, 15rem) auto;
   gap: 2rem;
@@ -386,9 +384,13 @@ h2 {
   transition: all 0.3s;
 }
 
-.form__input:focus {
+.form__input:focus,
+.logOut:focus {
   outline: none;
   background-color: rgba(255, 255, 255, 0.6);
+}
+.signup__input:hover {
+  border: 1px solid black;
 }
 
 .form__label {
@@ -412,17 +414,34 @@ h2 {
 
 .logout-timer {
   padding: 0 0.3rem;
-  margin-top: 1.9rem;
+  margin-top: 0.3rem;
+  margin-bottom: 1.9rem;
   text-align: right;
   font-size: 1.25rem;
 }
 
+.logOut {
+  display: block;
+  width: 25%;
+  margin-left: 15rem;
+  font-size: 1.5rem;
+  color: #444;
+  font-weight: 500;
+  border: 1px solid #444;
+  background: transparent;
+  border-radius: 1rem;
+  transition: all 0.4s;
+}
+.logOut:hover {
+  font-size: 1.6rem;
+  border: 2px solid #444;
+}
 .timer {
   font-weight: 600;
 }
 
 section {
-  display: none;
+  display: block;
   padding-top: 5rem;
   width: 50%;
   height: 70vh;

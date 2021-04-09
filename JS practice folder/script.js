@@ -300,16 +300,24 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+const signUpUI = document.querySelector('section');
+const signupLoginUsername = document.querySelector('.signup__input--user');
+const inputSignupPin = document.querySelector('.signup__input--pin');
+const inputCurrency = document.querySelector('#Currency');
+const inputInterest = document.querySelector('#Interest');
+const btnSignup = document.querySelector('.signup__btn');
+const errorMess = document.querySelector('.signUp h2');
+
+const logOut = document.querySelector('.logOut');
 const eurToUsd = 1.1;
+
 const formatDate = (movementsDates, locale) => {
   const date = new Date(movementsDates);
-  console.log(date);
 
   const calDaysPassed = (date1, date2) =>
     Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
 
   const dayPassed = calDaysPassed(new Date(), date);
-  console.log(dayPassed);
 
   if (dayPassed === 0) return 'Today';
   if (dayPassed === 1) return 'Yesterday';
@@ -340,11 +348,12 @@ const displayMovements = function (
         return a - b;
       })
     : movements;
-  console.log(movs);
+
   movs.forEach((mov, i) => {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     // For Date
+    console.log(movementsDates[i], locale);
     const displayDate = formatDate(movementsDates[i], locale);
     // for Balance
     const formattedMov = formatCur(mov, locale, currency);
@@ -359,14 +368,16 @@ const displayMovements = function (
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-
+const splitName = (account) => {
+  return account
+    .toLowerCase()
+    .split(' ')
+    .map((n) => n[0])
+    .join('');
+};
 const createUsernames = (accounts) => {
   accounts.forEach((account) => {
-    account.username = account.owner
-      .toLowerCase()
-      .split(' ')
-      .map((n) => n[0])
-      .join('');
+    account.username = splitName(account.owner);
   });
 };
 createUsernames(accounts);
@@ -402,6 +413,7 @@ const calcDisplaySummary = (movement) => {
 // update UI
 const updateUi = (Account) => {
   // Display Movements
+  console.log(Account);
   displayMovements(Account);
 
   // Display balance
@@ -412,7 +424,7 @@ const updateUi = (Account) => {
 };
 // Event handlers
 let currentAccount, timer;
-console.log(accounts);
+
 // fake login in
 // currentAccount = account1;
 // updateUi(currentAccount);
@@ -456,6 +468,7 @@ const currTime = () => {
       year: 'numeric',
       weekday: 'long',
     };
+
     labelDate.textContent = new Intl.DateTimeFormat(
       currentAccount.locale,
       option,
@@ -481,6 +494,7 @@ btnLogin.addEventListener('click', function (e) {
       currentAccount.owner.split(' ')[0]
     }`;
     containerApp.style.display = 'grid';
+    signUpUI.style.display = 'none';
     // Inialize date
     // labelDate.textContent = date();
     // clear the input fields
@@ -541,7 +555,6 @@ btnLoan.addEventListener('click', function (e) {
     setTimeout(() => {
       currentAccount.movements.push(amount);
       currentAccount.movementsDates.push(new Date().toISOString());
-      console.log(new Date().toISOString());
 
       updateUi(currentAccount);
       // Reset timer
@@ -572,27 +585,30 @@ btnClose.addEventListener('click', function (e) {
 
     accounts.splice(index, 1);
     containerApp.style.display = 'none';
+    signUpUI.style.display = 'block';
     inputCloseUsername.value = inputClosePin.value = '';
     inputClosePin.blur();
   }
 });
+logOut.addEventListener('click', function (e) {
+  e.preventDefault();
+  containerApp.style.display = 'none';
+  signUpUI.style.display = 'block';
+});
 
-const signUpName = 'Manish Chhetri';
-const intrest = 1.5;
-const pin = 5555;
-const curr = 'INR';
-const Local = 'en-US';
-let newAccount;
+// const signUpName = 'Manish Chhetri';
+// const intrest = 1.5;
+// const pin = 5555;
+// const curr = 'INR';
+// const Local = 'en-US';
+// let newAccount;
 
 // Create NEw Account
 // console.log(currentAccount);
 
-const createAccount = () => {
-  const BankName = signUpName
-    .toLowerCase()
-    .split(' ')
-    .map((n) => n[0])
-    .join('');
+const createAccount = (newAccount) => {
+  const { owner } = newAccount;
+  const BankName = splitName(owner);
   const Username = accounts
     .map((account) => account)
     .find((account) => {
@@ -600,25 +616,50 @@ const createAccount = () => {
     });
   if (Username === undefined) {
     // Create New Object
-    newAccount = {
-      username: BankName,
-      owner: signUpName,
-      movementsDates: [new Date().toISOString()],
-      interestRate: intrest,
-      pin: pin,
-      currency: curr,
-      locale: Local,
-      movements: [1000],
-    };
 
     // Add aboject to the array
+    newAccount.username = BankName;
+
     accounts.push(newAccount);
+    currentAccount = newAccount;
+    currTime();
+    if (timer) clearInterval(timer);
+    timer = startLogOut();
+
+    updateUi(newAccount);
+    containerApp.style.display = 'grid';
+    signUpUI.style.display = 'none';
+    labelWelcome.textContent = `Welcome back,${newAccount.owner.split(' ')[0]}`;
 
     // update UI
+
     // updateUi(accounts);
+  } else {
+    errorMess.textContent = 'User already here';
+    errorMess.style.color = 'red';
   }
 };
 
+btnSignup.addEventListener('click', function (e) {
+  e.preventDefault();
+  if (signupLoginUsername.value === '') {
+    signupLoginUsername.style.border = '1px solid red';
+  } else if (inputSignupPin.value === '' || isNaN(inputSignupPin.value)) {
+    inputSignupPin.style.border = '1px solid red';
+  } else {
+    newAccount = {
+      owner: signupLoginUsername.value,
+      movementsDates: [new Date().toISOString()],
+      interestRate: +inputInterest.value,
+      pin: +inputSignupPin.value,
+      currency: inputCurrency.value,
+      locale: 'en-US',
+      movements: [1000],
+    };
+    signupLoginUsername.value = inputSignupPin.value = '';
+    createAccount(newAccount);
+  }
+});
 //
 // Setting date and Time
 // function date() {
@@ -636,28 +677,28 @@ const createAccount = () => {
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
-// Maximum Value
-const max = movements.reduce((acc, mov) => {
-  if (acc > mov) return acc;
-  return mov;
-}, movements[0]);
+// // Maximum Value
+// const max = movements.reduce((acc, mov) => {
+//   if (acc > mov) return acc;
+//   return mov;
+// }, movements[0]);
 
-// pipeLine
+// // pipeLine
 
-const totalDepositesUSD = movements
-  .filter((mov) => mov > 0)
-  .map((mov) => mov * eurToUsd)
-  .reduce((acc, mov) => acc + mov, 0);
-// console.log(totalDepositesUSD);
+// const totalDepositesUSD = movements
+//   .filter((mov) => mov > 0)
+//   .map((mov) => mov * eurToUsd)
+//   .reduce((acc, mov) => acc + mov, 0);
+// // console.log(totalDepositesUSD);
 
-const currencies = new Map([
-  ['USD', 'United States dollar'],
-  ['EUR', 'Euro'],
-  ['GBP', 'Pound sterling'],
-]);
-const account = accounts.find((acc) => acc.owner === 'Manish Chhetri');
+// const currencies = new Map([
+//   ['USD', 'United States dollar'],
+//   ['EUR', 'Euro'],
+//   ['GBP', 'Pound sterling'],
+// ]);
+// const account = accounts.find((acc) => acc.owner === 'Manish Chhetri');
 
 // console.log(account);
 //
