@@ -196,10 +196,59 @@
 
 // Advance DOM for Websites
 
+// const message = document.createElement('div');
+// message.classList.add('cookie-message');
+// message.innerHTML =
+//   'We use cookie for improved functionality and analytics.<button class="btn btn--close--cookie">Got it</button>';
+
+// header.append(message);
+
+// document
+//   .querySelector('.btn--close--cookie')
+//   .addEventListener('click', function () {
+//     message.remove();
+//   });
+// console.log(s1coords);
+// window.scrollTo(
+//   s1coords.left + window.pageXOffset,
+//   s1coords.top + window.pageYOffset,
+// );
+// console.log(window.pageYOffset);
+// console.log(
+//   s1coords.left + window.pageYOffset,
+//   s1coords.top + window.pageYOffset,
+// );
+// old way
+// window.scrollTo({
+//   left: s1coords.left + window.pageXOffset,
+//   top: s1coords.top + window.pageYOffset,
+//   behavior: 'smooth',
+// });
+// const random = (min, max) => {
+//   return Math.floor(Math.random() * (max - min + 1) + min);
+// };
+// const randomcolor = () => {
+//   return `rgb(${random(0, 255)},${random(0, 255)},${random(0, 255)})`;
+// };
+
+// console.log(randomcolor());
+// document.querySelector('.nav__link').addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomcolor();
+// });
+// document.querySelector('.nav__links').addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomcolor();
+// });
+// document.querySelector('.nav').addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomcolor();
+// });
+
+// const h1 = document.querySelector('h1');
+// console.log(h1.querySelectorAll('.highlight'));
+
 // ***********************************************//
 
 // Banklist website
-'use strict';
+('use strict');
 
 ///////////////////////////////////////
 // Modal window
@@ -231,59 +280,55 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-// const message = document.createElement('div');
-// message.classList.add('cookie-message');
-// message.innerHTML =
-//   'We use cookie for improved functionality and analytics.<button class="btn btn--close--cookie">Got it</button>';
-
-// header.append(message);
-
-// document
-//   .querySelector('.btn--close--cookie')
-//   .addEventListener('click', function () {
-//     message.remove();
-//   });
-
-// smooth scrolling
+// smooth scrolling button
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
 btnScrollTo.addEventListener('click', function (e) {
-  const s1coords = section1.getBoundingClientRect();
-  // console.log(s1coords);
-  // window.scrollTo(
-  //   s1coords.left + window.pageXOffset,
-  //   s1coords.top + window.pageYOffset,
-  // );
-  // console.log(window.pageYOffset);
-  // console.log(
-  //   s1coords.left + window.pageYOffset,
-  //   s1coords.top + window.pageYOffset,
-  // );
-  // old way
-  // window.scrollTo({
-  //   left: s1coords.left + window.pageXOffset,
-  //   top: s1coords.top + window.pageYOffset,
-  //   behavior: 'smooth',
-  // });
+  // const s1coords = section1.getBoundingClientRect();
 
   // mordern weekday
   section1.scrollIntoView({ behavior: 'smooth' });
 });
 
-const random = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-};
-const randomcolor = () => {
-  return `rgb(${random(0, 255)},${random(0, 255)},${random(0, 255)})`;
-};
+// page NAvigation
 
-console.log(randomcolor());
-document.querySelector('.nav__link').addEventListener('click', function (e) {
-  this.style.backgroundColor = randomcolor();
-});
+// document.querySelectorAll('.nav__link').forEach((el) => {
+//   el.addEventListener('click', function (e) {
+//     e.preventDefault();
+//     const id = this.getAttribute('href');
+//     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+//   });
+// });
+// 1. Add event list to common parent element
+// 2. dterminr what element originated the event
 document.querySelector('.nav__links').addEventListener('click', function (e) {
-  this.style.backgroundColor = randomcolor();
+  // MAtching strategy
+  e.preventDefault();
+  if (e.target.classList.contains('nav__link')) {
+    const id = e.target.getAttribute('href');
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+  }
 });
-document.querySelector('.nav').addEventListener('click', function (e) {
-  this.style.backgroundColor = randomcolor();
+
+// TAbbed component
+
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+// tabs.forEach(t=>t.addEventListener('click',()=>{
+
+// }))
+tabsContainer.addEventListener('click', function (e) {
+  const clicked = e.target.closest('.operations__tab');
+
+  // Guard clause
+  if (!clicked) return;
+  tabs.forEach((t) => t.classList.remove('operations__tab--active'));
+  clicked.classList.add('operations__tab--active');
+  tabsContent.forEach((c) => c.classList.remove('operations__content--active'));
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add('operations__content--active');
 });
+
+// //////////////////////
