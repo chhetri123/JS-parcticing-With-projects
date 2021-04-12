@@ -1,4 +1,4 @@
-/* @import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
 
 * {
   margin: 0;
@@ -15,11 +15,10 @@ body {
   font-family: 'Press Start 2P', sans-serif;
   color: #eee;
   background-color: #222;
-  /* background-color: #60b347; 
+  background-color: #60b347;
 }
 
-/* LAYOUT 
-header {
+LAYOUT header {
   position: relative;
   height: 35vh;
   border-bottom: 7px solid #eee;
@@ -45,8 +44,7 @@ main {
   font-size: 2rem;
 }
 
-/* ELEMENTS STYLE 
-h1 {
+ELEMENTS STYLE h1 {
   font-size: 4rem;
   text-align: center;
   position: absolute;
@@ -116,7 +114,7 @@ h1 {
 
 .label-score {
   margin-bottom: 2rem;
-} */
+}
 /*
  * Use this CSS to learn some intersting techniques,
  * in case you're wondering how I built the UI.
