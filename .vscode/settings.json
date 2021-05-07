@@ -1,0 +1,5 @@
+{
+    "files.autoSave": "onFocusChange",
+    "editor.renderWhitespace": "none",
+    "editor.minimap.showSlider": "always"
+}
